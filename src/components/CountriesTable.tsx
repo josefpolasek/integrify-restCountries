@@ -45,6 +45,15 @@ const CountriesTable = () => {
     setSelected(id);
   };
 
+  // Sort countries alphabetically by name
+  const sortedCountries = [...countries].sort((a, b) => {
+    return a.name.common.localeCompare(b.name.common);
+  });
+
+  console.log(countries);
+  console.log(sortedCountries);
+
+
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -62,7 +71,8 @@ const CountriesTable = () => {
           {/* Map through each country object in the `countries` array */}
 
 
-          {countries.map((country, index) => (
+          {sortedCountries.map((country, index) => (
+
             // {Object.values(country.languages).map((language, index) => (
             // ))}
             <TableRow
