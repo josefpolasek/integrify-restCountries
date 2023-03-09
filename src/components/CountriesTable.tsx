@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
 
 interface Props {
   searchQuery: string;
 }
 
-// Define the interface for a country object
-// Interface is like interface in Java (kind of)
 interface Country {
   flags: {
     png: string;
@@ -21,12 +19,11 @@ interface Country {
   languages: Record<string, string>;
 }
 
-// this is basically like in JavaScript
 const CountriesTable = ({ searchQuery }: Props) => {
   const [selected, setSelected] = useState<number | null>(null);
   const [countries, setCountries] = useState<Country[]>([]);
+  const [page, setPage] = useState<number>(1);
 
-  // Fetch the list of countries from the API
   useEffect(() => {
     const fetchCountries = async () => {
       const { data } = await axios.get<Country[]>(
@@ -37,20 +34,31 @@ const CountriesTable = ({ searchQuery }: Props) => {
     fetchCountries();
   }, []);
 
-  // Handle row click
   const handleRowClick = (id: number) => {
     setSelected(id);
   };
 
-  // Filter countries based on search query
+  const handleNextPage = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setPage((prevPage) => prevPage - 1);
+  };
+
+  const pageSize = 5;
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+
   const filteredCountries = countries.filter((country) => {
     return country.name.common.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  // Sort countries alphabetically by name
   const sortedCountries = [...filteredCountries].sort((a, b) => {
     return a.name.common.localeCompare(b.name.common);
   });
+
+  const countriesToDisplay = sortedCountries.slice(startIndex, endIndex);
 
   return (
     <TableContainer component={Paper}>
@@ -66,19 +74,12 @@ const CountriesTable = ({ searchQuery }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {/* Map through each country object in the `countries` array */}
-
-
-          {sortedCountries.map((country, index) => (
-
-            // {Object.values(country.languages).map((language, index) => (
-            // ))}
+          {countriesToDisplay.map((country, index) => (
             <TableRow
-              key={index}
-              onClick={() => handleRowClick(index)}
-              selected={index === selected}
+              key={startIndex + index}
+              onClick={() => handleRowClick(startIndex + index)}
+              selected={startIndex + index === selected}
             >
-              {/* First column: Flag */}
               <TableCell>
                 <img
                   src={country.flags.png}
@@ -87,34 +88,28 @@ const CountriesTable = ({ searchQuery }: Props) => {
                   height="32"
                 />
               </TableCell>
-
-              {/* Second column: Name */}
               <TableCell>{country.name.common}</TableCell>
-
-              {/* Third column: Capital */}
               <TableCell>{country.capital}</TableCell>
-
-              {/* Fourth column: Region */}
               <TableCell>{country.region}</TableCell>
-
-              {/* Fifth column: Population */}
               <TableCell>{country.population}</TableCell>
-
-              {/* Sixth column: Languages as bullet points */}
               <TableCell>
                 <ul>
                   {country.languages &&
                     Object.values(country.languages).map((lang: string) => (
                       <li key={lang}>{lang}</li>
                     ))}
-
                 </ul>
-
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <Button onClick={handlePrevPage} disabled={page === 1}>
+        Prev Page
+      </Button>
+      <Button onClick={handleNextPage} disabled={endIndex >= sortedCountries.length}>
+        Next Page
+      </Button>
     </TableContainer>
   );
 };
