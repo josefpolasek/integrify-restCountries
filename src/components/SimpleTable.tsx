@@ -28,7 +28,7 @@ const SimpleTable = () => {
 
   // this function is called when a row is clicked
   const handleRowClick = (id: number) => {
-    setSelected(id);
+    setSelected(id); // that's a MUI component
   };
 
   // this part is React JSX. This part looks like my normal javascript files.
