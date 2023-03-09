@@ -3,7 +3,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 
-import SimpleTable from './SimpleTable';
+import SimpleTable from './components/SimpleTable';
 
 function App() {
   return (

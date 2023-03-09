@@ -4,6 +4,7 @@
  * I commented the code to understand what is going on.
  */
 
+import { useState } from "react"; 
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material"; // components from Material UI
 
 // interface seems to be similiar to interface in Java
@@ -22,6 +23,14 @@ const rows: Row[] = [
 ];
 
 const SimpleTable = () => {
+  // initial state is null, setSelected is a function that sets the state
+  const [selected, setSelected] = useState<number | null>(null);
+
+  // this function is called when a row is clicked
+  const handleRowClick = (id: number) => {
+    setSelected(id);
+  };
+
   // this part is React JSX. This part looks like my normal javascript files.
   return (
     // this is basically like a Table in HTML
@@ -33,9 +42,9 @@ const SimpleTable = () => {
             <TableCell>Age</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody> 
           {rows.map((row) => (
-            <TableRow key={row.id} >
+            <TableRow key={row.id} onClick={() => handleRowClick(row.id)} selected={row.id === selected}>
               <TableCell>{row.name}</TableCell>
               <TableCell>{row.age}</TableCell>
             </TableRow>
