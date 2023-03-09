@@ -1,52 +1,74 @@
 /**
- * This is a simple table that displays a list of names and ages.
- * This code was writen by ChatGPT. 
- * I commented the code to understand what is going on.
+ * In this version I added fetching data from the API and displaying them instead of the names and ages.
  */
 
-import { useState } from "react"; 
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material"; // components from Material UI
+import { useEffect, useState } from "react";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress } from "@mui/material"; // components from Material UI
 
-// interface seems to be similiar to interface in Java
-interface Row {
-  id: number;
+// all components of each country; it's a bit like interface in Java
+interface Country {
+  flag: string;
   name: string;
-  age: number;
+  region: string;
+  population: number;
+  languages: { [key: string]: string }[];
 }
 
-// this array represents the table data
-const rows: Row[] = [
-  { id: 1, name: "John", age: 25 },
-  { id: 2, name: "Sarah", age: 32 },
-  { id: 3, name: "Bob", age: 18 },
-  { id: 4, name: "Alice", age: 45 },
-];
-
 const SimpleTable = () => {
-  // initial state is null, setSelected is a function that sets the state
-  const [selected, setSelected] = useState<number | null>(null);
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [loading, setLoading] = useState(true);
+  // const [selected, setSelected] = useState<number | null>(null);
 
-  // this function is called when a row is clicked
-  const handleRowClick = (id: number) => {
-    setSelected(id); // that's a MUI component
-  };
+  // // this function is called when a row is clicked
+  // const handleRowClick = (id: number) => {
+  //   setSelected(id); // that's a MUI component
+  // };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://restcountries.com/v3.1/all");
+        const data = await response.json();
+        setCountries(data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   // this part is React JSX. This part looks like my normal javascript files.
   return (
-    // this is basically like a Table in HTML
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell>Flag</TableCell>
             <TableCell>Name</TableCell>
-            <TableCell>Age</TableCell>
+            <TableCell>Region</TableCell>
+            <TableCell>Population</TableCell>
+            <TableCell>Languages</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody> 
-          {rows.map((row) => (
-            <TableRow key={row.id} onClick={() => handleRowClick(row.id)} selected={row.id === selected}>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.age}</TableCell>
+        <TableBody>
+          {countries.map((country) => (
+            <TableRow key={country.name}>
+              <TableCell>
+                <img src={country.flag} alt={country.name} width="50" />
+              </TableCell>
+              <TableCell>{country.name}</TableCell>
+              <TableCell>{country.region}</TableCell>
+              <TableCell>{country.population}</TableCell>
+              <TableCell>
+                {Object.values(country.languages).join(", ")}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -54,5 +76,6 @@ const SimpleTable = () => {
     </TableContainer>
   );
 };
+
 
 export default SimpleTable;
