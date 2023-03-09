@@ -1,13 +1,10 @@
-/**
- * This is a table that displays a list of countries and their details.
- * I haven't really used Typescript before.
- * A lot of Googling (and a bit of ChatGPT) helped me a lot with this project.
- * I also use GitHub Copilot. It's pretty cool.
- */
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+
+interface Props {
+  searchQuery: string;
+}
 
 // Define the interface for a country object
 // Interface is like interface in Java (kind of)
@@ -25,7 +22,7 @@ interface Country {
 }
 
 // this is basically like in JavaScript
-const CountriesTable = () => {
+const CountriesTable = ({ searchQuery }: Props) => {
   const [selected, setSelected] = useState<number | null>(null);
   const [countries, setCountries] = useState<Country[]>([]);
 
@@ -45,14 +42,15 @@ const CountriesTable = () => {
     setSelected(id);
   };
 
-  // Sort countries alphabetically by name
-  const sortedCountries = [...countries].sort((a, b) => {
-    return a.name.common.localeCompare(b.name.common);
+  // Filter countries based on search query
+  const filteredCountries = countries.filter((country) => {
+    return country.name.common.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  console.log(countries);
-  console.log(sortedCountries);
-
+  // Sort countries alphabetically by name
+  const sortedCountries = [...filteredCountries].sort((a, b) => {
+    return a.name.common.localeCompare(b.name.common);
+  });
 
   return (
     <TableContainer component={Paper}>
