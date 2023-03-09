@@ -3,13 +3,14 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 
-import SimpleTable from './components/SimpleTable';
+import CountriesTable from './components/CountriesTable';
 
 function App() {
   return (
     <div>
-      <SimpleTable />
+      <CountriesTable />
     </div>
+
   );
 }
 

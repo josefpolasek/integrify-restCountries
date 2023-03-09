@@ -1,12 +1,16 @@
 /**
  * This is a table that displays a list of countries and their details.
- * Modified by ChatGPT.
+ * I haven't really used Typescript before.
+ * A lot of Googling (and a bit of ChatGPT) helped me a lot with this project.
+ * I also use GitHub Copilot. It's pretty cool.
  */
 
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
+// Define the interface for a country object
+// Interface is like interface in Java (kind of)
 interface Country {
   flags: {
     png: string;
@@ -20,10 +24,12 @@ interface Country {
   languages: Record<string, string>;
 }
 
+// this is basically like in JavaScript
 const CountriesTable = () => {
   const [selected, setSelected] = useState<number | null>(null);
   const [countries, setCountries] = useState<Country[]>([]);
 
+  // Fetch the list of countries from the API
   useEffect(() => {
     const fetchCountries = async () => {
       const { data } = await axios.get<Country[]>(
@@ -34,20 +40,10 @@ const CountriesTable = () => {
     fetchCountries();
   }, []);
 
+  // Handle row click
   const handleRowClick = (id: number) => {
     setSelected(id);
   };
-
-  // countries.map((country, index) => {
-  //   if (country.languages == null) console.log("N/A");
-  //   else {
-  //     Object.values(country.languages).map((lang) => {
-  //       if (lang != null) console.log(lang);
-  //     })
-  //     // country.languages.map
-  //     // console.log(Object.values(country.languages));
-  //   }
-  // })
 
   return (
     <TableContainer component={Paper}>
