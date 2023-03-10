@@ -1,6 +1,6 @@
 /* LIBRARIES */
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, /* Switch */ } from 'react-router-dom';
 
 /* COMPONENTS */
 import CountriesTable from './components/CountriesTable';
@@ -17,23 +17,29 @@ function App() {
 
   return (
     // using Router for switching between CountriesTable.tsx and SingleCountry.tsx
-    <Router>
-      <div>
-        <Navbar onSearch={handleSearch} />
+    <div>
+      <Navbar onSearch={handleSearch} />
 
-        <Switch>
-          <Route path="/country/">
-            <h1>Single Country</h1>
-          </Route>
-          
-          <Route path="/">
-            <CountriesTable searchQuery={searchQuery} />
-          </Route>
-        </Switch>
-        
-      </div>
-    </Router>
+      <CountriesTable searchQuery={searchQuery} />
+    </div>
   );
 }
+
+// {/* <Router>
+//       <div>
+//         <Navbar onSearch={handleSearch} />
+
+//         <Switch>
+//           <Route path="/country/">
+//             <h1>Single Country</h1>
+//           </Route>
+
+//           <Route path="/">
+//             <CountriesTable searchQuery={searchQuery} />
+//           </Route>
+//         </Switch>
+
+//       </div>
+//     </Router> */}
 
 export default App;
