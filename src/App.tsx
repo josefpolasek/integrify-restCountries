@@ -1,19 +1,38 @@
+/* LIBRARIES */
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
-
+/* COMPONENTS */
 import CountriesTable from './components/CountriesTable';
 import Navbar from './components/Navbar';
 
 function App() {
+  // state variable to store the search query
   const [searchQuery, setSearchQuery] = useState("");
 
+  // function to update the searchQuery state 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
   return (
-    <div>
-      <Navbar onSearch={setSearchQuery} />
-      <CountriesTable searchQuery={searchQuery} />
-    </div>
+    // using Router for switching between CountriesTable.tsx and SingleCountry.tsx
+    <Router>
+      <div>
+        <Navbar onSearch={handleSearch} />
+
+        <Switch>
+          <Route path="/country/">
+            <h1>Single Country</h1>
+          </Route>
+          
+          <Route path="/">
+            <CountriesTable searchQuery={searchQuery} />
+          </Route>
+        </Switch>
+        
+      </div>
+    </Router>
   );
 }
 
