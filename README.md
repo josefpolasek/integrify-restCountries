@@ -1,4 +1,4 @@
-[Link to a deployed page](https://resplendent-bienenstitch-20171a.netlify.app/)
+Deployed page: https://integrify-rest-countries.vercel.app/
 
 This is an assignment for [Integrify Academy](https://www.integrify.io/). 
 It's a simple table that displays countries from [Rest Countries API](https://restcountries.com/). 
